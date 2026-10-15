@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field, field_validator
 import pymongo
 from pymongo import MongoClient, ReturnDocument
@@ -302,6 +302,12 @@ app = FastAPI(title="Employee Attendance & Analytics API", version="2.0.0", life
 # --------------------------------------------------------------------------- #
 # Endpoints
 # --------------------------------------------------------------------------- #
+@app.get("/", include_in_schema=False)
+def root():
+    """Redirect root path to interactive Swagger documentation."""
+    return RedirectResponse(url="/docs")
+
+
 @app.get("/health")
 def health():
     """Readiness probe. Returns 200 only if MongoDB answers a ping, otherwise 503."""
